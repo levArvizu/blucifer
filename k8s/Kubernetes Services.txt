@@ -1,0 +1,10 @@
+Exponen los pods dentro del clúster.
+
+Tipos:
+
+ClusterIP: acceso interno (Postgres, Redis, Kafka).
+
+LoadBalancer: acceso externo (Backend).
+
+Relación:  
+El backend se comunica con los otros servicios usando sus nombres (postgres, redis, kafka).

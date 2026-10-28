@@ -1,0 +1,29 @@
+# versión del API para servicios.
+apiVersion: v1
+
+# recurso que expone pods en la red del clúster.
+kind: Service
+
+# nombre del servicio.
+metadata:
+  name: redis
+
+spec:
+  # selecciona pods con la etiqueta app: redis.
+  selector:
+    app: redis
+
+  ports:
+      # puerto expuesto dentro del clúster.
+    - port: 6379
+      # puerto del contenedor al que se redirige el tráfico.
+      targetPort: 6379
+
+# accesible solo dentro del clúster.
+  type: ClusterIP
+  
+# En Docker Compose, Redis se expone directamente en tu máquina (6379:6379).
+
+# En Kubernetes, Redis se expone solo dentro del clúster mediante un Service ClusterIP.
+
+# El backend se conecta a Redis usando el nombre del servicio (redis:6379) en lugar de localhost.

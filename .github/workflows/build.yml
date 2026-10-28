@@ -1,0 +1,77 @@
+#nombre del workflow.
+name: Fullstack Lab CI-CD
+
+# define los eventos que lo activan (push o pull request a main).
+on:
+
+  push:
+
+    branches:
+      - main
+
+  pull_request:
+
+    branches:
+      - main
+
+jobs:
+  # define el trabajo principal.
+  build:
+    # ejecuta el workflow en un entorno Linux.
+    runs-on: ubuntu-latest
+    # lista de pasos automatizados:
+    steps:
+        # descarga el código fuente.
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+        # instala Java Temurin 21.
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      # confirma que Maven está disponible.
+      - name: Verify Maven
+        run: mvn -version
+
+        # ejecuta las pruebas.
+      - name: Run Tests
+        run: mvn -f backend/pom.xml test
+
+      # compila el proyecto y genera el .jar.
+      - name: Build Application
+        run: mvn -f backend/pom.xml package -DskipTests
+
+        # guarda el .jar como artefacto del build.
+      - name: Upload Jar Artifact
+
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: fullstack-lab-jar
+          path: backend/target/*.jar
+
+      - name: Login to Docker Hub
+
+        uses: docker/login-action@v3
+
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
+      - name: Build Docker Image
+        run: |
+            docker build \
+               -f backend/Dockerfile \
+               -t ${{ secrets.DOCKERHUB_USERNAME }}/fullstack-lab:latest \
+               backend
+          
+      - name: Push Docker Image
+          run: |
+            docker push \
+              ${{ secrets.DOCKERHUB_USERNAME }}/fullstack-lab:latest
+          
+# Propósito:  
+# Automatiza la compilación y empaquetado de tu aplicación cada vez que haces push o PR a main.

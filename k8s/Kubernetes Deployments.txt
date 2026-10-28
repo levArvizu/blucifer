@@ -1,0 +1,19 @@
+Cada servicio (Postgres, Redis, Kafka, Backend) se define como un Deployment.
+
+Propósito:
+
+Crear pods que ejecutan los contenedores.
+
+Controlar réplicas y actualizaciones.
+
+Definir variables de entorno y puertos.
+
+Ejemplo:
+
+Postgres: image: postgres:17, puerto 5432.
+
+Redis: image: redis:8, puerto 6379.
+
+Kafka: image: apache/kafka:latest, puerto 9092.
+
+Backend: image: fullstack-lab:latest, puerto 8080.

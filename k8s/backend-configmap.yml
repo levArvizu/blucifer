@@ -1,0 +1,32 @@
+apiVersion: v1
+
+# recurso para almacenar variables de configuración no sensibles.
+kind: ConfigMap
+
+metadata:
+  # nombre del ConfigMap.
+  name: backend-config
+
+data:
+  # URL de conexión a la base de datos Postgres (usa el nombre del servicio postgres).
+  DB_URL: jdbc:postgresql://postgres:5432/fullstacklab
+  # host del servicio Redis.
+  REDIS_HOST: redis
+  # host y puerto del servicio Kafka.
+  KAFKA_HOST: kafka:9092
+  
+  SPRING_PROFILES_ACTIVE: prod
+  
+# El Backend Deployment usa este ConfigMap con valueFrom.configMapKeyRef.
+
+# Dockerfile → construye la imagen del backend.
+
+# application.yml → define cómo la app se conecta a Postgres, Redis y Kafka.
+
+# Deployments (Postgres, Redis, Kafka, Backend) → crean los pods.
+
+# Services (Postgres, Redis, Kafka, Backend) → exponen los pods dentro del clúster.
+
+# ConfigMap + Secret → alimentan al backend con configuración y credenciales.
+
+# Ingress → expone el backend al exterior.

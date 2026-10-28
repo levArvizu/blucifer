@@ -1,0 +1,49 @@
+# versión del API para Deployments.
+apiVersion: apps/v1
+
+# recurso que gestiona pods.
+kind: Deployment
+
+metadata:
+  # nombre del Deployment.
+  name: redis
+
+spec:
+  # un pod de Redis.
+  replicas: 1
+
+  selector:
+    # etiqueta que identifica los pods gestionados.
+    matchLabels:
+      app: redis
+
+  template:
+
+    metadata:
+      # etiquetas aplicadas al pod.
+      labels:
+        app: redis
+
+    spec:
+
+      containers:
+        #  nombre del contenedor.
+        - name: redis
+          # imagen oficial de Redis versión 8.
+          image: redis:8
+          
+          imagePullPolicy: IfNotPresent
+          
+          # puerto interno de Redis.
+          ports:
+            - containerPort: 6379
+          
+          resources:
+
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+
+            limits:
+              cpu: "250m"
+              memory: "256Mi"

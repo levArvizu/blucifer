@@ -1,0 +1,141 @@
+Clasificación y explicación de comandos
+🔹 Kubernetes (kubectl)
+🗑️ Eliminar recursos
+kubectl delete -f . → elimina todos los recursos definidos en los archivos YAML dentro del directorio actual.
+
+kubectl delete pod backend-deployment-867dfc6f9b-j6x99 → elimina un pod específico (Kubernetes lo recreará si está bajo un Deployment).
+
+📥 Crear / aplicar recursos
+kubectl apply -f backend-ingress.yml → crea o actualiza el Ingress definido en ese archivo.
+
+kubectl apply -f backend-service.yml → crea o actualiza el Service del backend.
+
+kubectl apply -f backend-deployment.yml → crea o actualiza el Deployment del backend.
+
+kubectl apply -f redis-service.yml → crea o actualiza el Service de Redis.
+
+kubectl apply -f redis-deployment.yml → crea o actualiza el Deployment de Redis.
+
+kubectl apply -f . → aplica todos los manifiestos YAML en el directorio actual.
+
+kubectl apply -f backend-deployment.yml --dry-run=client → simula la aplicación del manifiesto sin ejecutarlo realmente (útil para validar sintaxis).
+
+🔍 Inspección de recursos
+kubectl get ingress → lista los Ingress en el namespace actual.
+
+kubectl get services → lista los Services en el namespace actual.
+
+kubectl get nodes -o wide → lista los nodos del clúster con información detallada (IP, roles, etc.).
+
+kubectl get pods -A → lista todos los pods en todos los namespaces.
+
+kubectl get services -A → lista todos los Services en todos los namespaces.
+
+kubectl get deployments -A → lista todos los Deployments en todos los namespaces.
+
+kubectl get pods -n dev → lista los pods en el namespace dev.
+
+kubectl get namespaces → lista todos los namespaces.
+
+kubectl get pod → lista los pods en el namespace actual.
+
+kubectl get replicasets → lista los ReplicaSets (controlan los pods creados por un Deployment).
+
+kubectl get pods -w → observa en tiempo real los cambios de estado de los pods.
+
+kubectl get all → lista todos los recursos en el namespace actual.
+
+📝 Detalles y descripción
+kubectl describe pod backend-deployment-77fcf657bb-gqt75 → muestra información detallada de un pod (eventos, estado, contenedores, etc.).
+
+kubectl logs deployment/backend-deployment --tail=50 → muestra las últimas 50 líneas de logs del Deployment del backend.
+
+🔄 Rollouts y actualizaciones
+kubectl rollout history deployment backend-deployment → muestra el historial de despliegues del backend.
+
+kubectl rollout undo deployment backend-deployment → revierte el Deployment a la versión anterior.
+
+kubectl rollout status deployment backend-deployment → muestra el estado del despliegue actual.
+
+kubectl rollout restart deployment backend-deployment → reinicia los pods del Deployment.
+
+🏗️ Namespaces
+kubectl create namespace dev → crea un namespace llamado dev.
+
+🔹 Docker
+🗑️ Gestión de contenedores
+docker stop backend-fullstack-lab → detiene el contenedor del backend.
+
+docker restart backend-fullstack-lab → reinicia el contenedor del backend.
+
+docker run -p 8080:8080 fullstack-lab → ejecuta la imagen fullstack-lab exponiendo el puerto 8080.
+
+docker exec -it postgres-fullstack-lab psql -U admin -d fullstacklab → abre una sesión interactiva en Postgres dentro del contenedor.
+
+docker exec -it redis-fullstack-lab redis-cli → abre la CLI de Redis dentro del contenedor.
+
+📥 Construcción e imágenes
+docker build -t fullstack-lab . → construye una imagen llamada fullstack-lab usando el Dockerfile en el directorio actual.
+
+docker images → lista todas las imágenes disponibles localmente.
+
+🔍 Inspección y logs
+docker ps → lista los contenedores en ejecución.
+
+docker logs backend-fullstack-lab → muestra los logs del contenedor backend.
+
+docker logs postgres-fullstack-lab → muestra los logs del contenedor Postgres.
+
+docker logs redis-fullstack-lab → muestra los logs del contenedor Redis.
+
+⚙️ Docker Compose
+docker compose config → valida y muestra la configuración de Docker Compose.
+
+docker compose version → muestra la versión de Docker Compose instalada.
+
+docker --version → muestra la versión de Docker instalada.
+
+🔹 Comandos adicionales que deberías conocer
+Kubernetes
+kubectl top pods → muestra consumo de CPU y memoria de los pods.
+
+kubectl top nodes → muestra consumo de recursos de los nodos.
+
+kubectl delete namespace dev → elimina un namespace completo.
+
+kubectl edit deployment backend-deployment → abre el manifiesto en un editor para modificarlo en vivo.
+
+kubectl port-forward pod/backend-deployment-xxx 8080:8080 → redirige un puerto local al pod.
+
+Docker
+docker rm <container_id> → elimina un contenedor detenido.
+
+docker rmi <image_id> → elimina una imagen.
+
+docker system prune → limpia contenedores, imágenes y volúmenes no usados.
+
+docker volume ls → lista volúmenes.
+
+docker network ls → lista redes.
+
+Clasifica mentalmente:
+
+kubectl get → inspección.
+
+kubectl apply/delete → gestión de recursos.
+
+kubectl rollout → despliegues y versiones.
+
+docker build/run/exec/logs → ciclo de vida de contenedores.
+
+Recuerda equivalencias:
+
+Docker Compose → Kubernetes Deployments + Services.
+
+docker logs → kubectl logs.
+
+docker ps → kubectl get pods.
+
+Practica con ejemplos reales:
+
+Levanta un pod, revisa logs, haz un rollout, elimina y vuelve a aplicar.

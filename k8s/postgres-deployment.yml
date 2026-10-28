@@ -1,0 +1,54 @@
+# versión del API de Kubernetes para definir Deployments.
+apiVersion: apps/v1
+
+# tipo de recurso, aquí un Deployment que gestiona pods.
+kind: Deployment
+
+# nombre único del Deployment.
+metadata:
+  name: postgres
+
+spec:
+  #  número de réplicas (un pod de Postgres).
+  replicas: 1
+
+  selector:
+    # etiqueta que identifica los pods gestionados por este Deployment.
+    matchLabels:
+      app: postgres
+
+  template:
+    metadata:
+      #  etiquetas que se aplican al pod creado.
+      labels:
+        app: postgres
+
+    spec:
+
+      containers:
+
+        - name: postgres
+
+          image: postgres:17
+
+          ports:
+            - containerPort: 5432
+
+          env:
+            - name: POSTGRES_DB
+              value: fullstacklab
+
+            - name: POSTGRES_USER
+              value: admin
+
+            - name: POSTGRES_PASSWORD
+              value: admin
+
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-storage
+
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc

@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: backend-deployment
+
+spec:
+  # tu backend se despliega con 3 pods para alta disponibilidad.
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: backend
+
+  template:
+
+      metadata:
+        labels:
+          app: backend
+          tier: backend
+          # útil para versionar despliegues.
+          version: v1
+
+      spec:
+
+        containers:
+
+          - name: backend
+            # la imagen que construiste con tu Dockerfile.
+            image: backend-fullstack-lab:latest
+            
+            imagePullPolicy: IfNotPresent
+
+            ports:
+              - containerPort: 8081
+
+            env:
+
+              - name: SPRING_DATASOURCE_URL
+                valueFrom:
+                  # obtiene valores de ConfigMap (DB_URL, REDIS_HOST, KAFKA_HOST).
+                  configMapKeyRef:
+                    name: backend-config
+                    key: DB_URL
+
+              - name: SPRING_DATA_REDIS_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: backend-config
+                    key: REDIS_HOST
+                    
+              - name: SPRING_DATA_REDIS_PORT
+                value: "6379"
+
+              - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+                valueFrom:
+                  configMapKeyRef:
+                    name: backend-config
+                    key: KAFKA_HOST
+
+              - name: SPRING_DATASOURCE_USERNAME
+                valueFrom:
+                  # obtiene credenciales de Secret (DB_USER, DB_PASSWORD).
+                  secretKeyRef:
+                    name: backend-secret
+                    key: DB_USER
+
+              - name: SPRING_DATASOURCE_PASSWORD
+                valueFrom:
+                  # obtiene credenciales de Secret (DB_USER, DB_PASSWORD).
+                  secretKeyRef:
+                    name: backend-secret
+                    key: DB_PASSWORD
+                    
+              - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+                value: org.postgresql.Driver
+              - name: JWT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: backend-secret
+                    key: JWT_SECRET
+
+              - name: JWT_EXPIRATION
+                valueFrom:
+                  secretKeyRef:
+                    name: backend-secret
+                    key: JWT_EXPIRATION
+                    
+              - name: SPRING_PROFILES_ACTIVE
+                valueFrom:
+                  configMapKeyRef:
+                    name: backend-config
+                    key: SPRING_PROFILES_ACTIVE
+
+            # verifica si el pod está listo para recibir tráfico (/actuator/health).
+            readinessProbe:
+              httpGet:
+                path: /actuator/health
+                port: 8081
+
+              initialDelaySeconds: 120
+              periodSeconds: 10
+
+            # verifica si el pod sigue vivo, reinicia si falla.
+            livenessProbe:
+              httpGet:
+                path: /actuator/health
+                port: 8081
+
+              initialDelaySeconds: 180
+              periodSeconds: 20
+              
+            resources:
+            # recursos mínimos garantizados.
+              requests:
+                cpu: "250m"
+                memory: "256Mi"
+            # recursos máximos permitidos.
+              limits:
+                cpu: "500m"
+                memory: "512Mi"

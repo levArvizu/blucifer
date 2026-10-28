@@ -1,0 +1,30 @@
+# versión del API para servicios.
+apiVersion: v1
+
+# recurso que expone pods en la red del clúster.
+kind: Service
+
+# nombre del servicio.
+metadata:
+  name: postgres
+
+spec:
+
+  selector:
+    # selecciona pods con la etiqueta app: postgres.
+    app: postgres
+
+  ports:
+     #  puerto expuesto dentro del clúster.
+    - port: 5432
+    # puerto del contenedor al que se redirige el tráfico.
+      targetPort: 5432
+
+  # el servicio solo es accesible dentro del clúster (no expuesto externamente).
+  type: ClusterIP
+  
+# En Docker Compose, Postgres se expone directamente en tu máquina (5432:5432).
+
+# En Kubernetes, Postgres se expone solo dentro del clúster mediante un Service ClusterIP.
+
+# El backend se conecta a Postgres usando el nombre del servicio (postgres:5432) en lugar de localhost.

@@ -1,0 +1,40 @@
+Kubernetes
+¿Qué diferencia hay entre kubectl apply -f y kubectl create -f?
+
+¿Qué hace el comando kubectl get pods -A y en qué se diferencia de kubectl get pods -n dev?
+
+¿Cómo verificarías si un Deployment está funcionando correctamente después de aplicarlo?
+
+¿Qué comando usarías para ver los logs de un pod específico?
+
+¿Qué diferencia hay entre un Service tipo ClusterIP y un Service tipo LoadBalancer?
+
+¿Qué comando usarías para revertir un Deployment a una versión anterior?
+
+¿Qué significa el flag --dry-run=client en kubectl apply?
+
+¿Cómo listarías todos los recursos (pods, services, deployments, etc.) en un namespace?
+
+¿Qué comando usarías para crear un nuevo namespace llamado test?
+
+¿Qué diferencia hay entre kubectl delete pod y kubectl delete deployment?
+
+apply crea o actualiza, create solo crea.
+
+-A = todos los namespaces, -n dev = solo el namespace dev.
+
+kubectl rollout status deployment <nombre> o kubectl get pods.
+
+kubectl logs <pod-name> o kubectl logs deployment/<nombre>.
+
+ClusterIP = acceso interno, LoadBalancer = acceso externo.
+
+kubectl rollout undo deployment <nombre>.
+
+Simula la aplicación sin ejecutarla (valida sintaxis).
+
+kubectl get all -n <namespace>.
+
+kubectl create namespace test.
+
+delete pod elimina un pod (se recrea si hay Deployment), delete deployment elimina todos los pods gestionados.

@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fullstack-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: fullstack.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 3000
+          - path: /api/
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 8081
+
+                  
+# El Backend Deployment usa la imagen construida con tu Dockerfile y configurada con tu application.yml.
+
+# Se conecta a Postgres, Redis y Kafka mediante los Services internos.
+
+# Usa ConfigMap y Secret para sus variables de entorno.
+
+# El Service expone el backend dentro del clúster y el Ingress lo expone al exterior.
+
+# Los probes garantizan que Kubernetes solo envíe tráfico a pods saludables.

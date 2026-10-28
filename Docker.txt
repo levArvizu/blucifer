@@ -1,0 +1,40 @@
+🔹 Docker
+¿Qué hace el comando docker build -t fullstack-lab .?
+
+¿Cómo verías los contenedores que están corriendo actualmente?
+
+¿Qué diferencia hay entre docker stop y docker rm?
+
+¿Qué comando usarías para entrar a la consola de Postgres dentro de un contenedor?
+
+¿Qué hace docker run -p 8080:8080 fullstack-lab?
+
+¿Cómo listarías todas las imágenes disponibles en tu máquina?
+
+¿Qué diferencia hay entre docker logs y kubectl logs?
+
+¿Qué hace docker compose config?
+
+¿Qué comando usarías para reiniciar un contenedor llamado backend-fullstack-lab?
+
+¿Qué diferencia hay entre docker --version y docker compose version?
+
+Construye una imagen con etiqueta fullstack-lab.
+
+docker ps.
+
+stop detiene, rm elimina.
+
+docker exec -it <container> psql -U admin -d fullstacklab.
+
+Ejecuta la imagen y expone el puerto 8080.
+
+docker images.
+
+docker logs = contenedor local, kubectl logs = pod en Kubernetes.
+
+Muestra la configuración procesada de Compose.
+
+docker restart backend-fullstack-lab.
+
+docker --version = versión de Docker Engine, docker compose version = versión de Compose.

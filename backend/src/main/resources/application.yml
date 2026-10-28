@@ -1,0 +1,90 @@
+server:
+  port: 8081
+
+# Define el nombre de la aplicación, útil para logs y monitoreo.
+spring:
+
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}
+
+  application:
+    name: fullstack-lab
+
+# Configura la conexión con Kafka:
+  kafka:
+    # dirección del broker Kafka (usa variable KAFKA_HOST).
+    bootstrap-servers: ${KAFKA_HOST:localhost:9092}
+    #  definen cómo se serializan/deserializan los mensajes.
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    
+    consumer:
+      # agrupa consumidores para balancear la carga.
+      group-id: fullstack-lab-group
+      # controla desde qué punto leer los mensajes (aquí desde el inicio).
+      auto-offset-reset: earliest
+
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+      properties:
+        spring.json.trusted.packages: "*"
+
+  messages:
+    basename: messages
+
+  #Conexión a la base de datos PostgreSQL:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/fullstacklab}
+    username: ${DB_USER:admin}
+    password: ${DB_PASSWORD:admin}
+    driver-class-name: org.postgresql.Driver
+
+  # Configura Redis como caché o almacenamiento temporal.
+  data:
+    redis:
+      # host y port también se obtienen de variables de entorno.
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+
+  # Define el comportamiento de Hibernate:
+  jpa:
+    hibernate:
+      # actualiza el esquema automáticamente.
+      ddl-auto: update
+    # muestra las consultas SQL en consola.
+    show-sql: true
+  
+  # Activa el endpoint /actuator/health para monitoreo. En Kubernetes, este endpoint se usa en los readiness y liveness probes del backend.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  endpoint:
+    health:
+      show-details: always
+      
+    metrics:
+      enabled: true
+
+    prometheus:
+      enabled: true
+
+jwt:
+  secret: ${JWT_SECRET:my-secret-key-my-secret-key-my-secret-key-123}
+  expiration: ${JWT_EXPIRATION:3600000}
+
+
+# Define la configuración de tu aplicación:
+
+# Conexiones a Postgres, Redis y Kafka.
+
+# Configuración de JPA y Actuator para salud del sistema.
+
+# Variables de entorno (DB_URL, DB_USER, DB_PASSWORD, etc.) que se obtienen del ConfigMap y Secret.
+
+# Relación:  
+# El backend usa este archivo para conectarse a los servicios del clúster.

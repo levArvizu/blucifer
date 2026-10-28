@@ -1,0 +1,28 @@
+apiVersion: v1
+#recurso que expone Kafka dentro del clúster.
+kind: Service
+
+metadata:
+  #  nombre del servicio.
+  name: kafka
+
+spec:
+
+  selector:
+    # selecciona pods con la etiqueta app: kafka.
+    app: kafka
+
+  ports:
+    #  puerto expuesto dentro del clúster.
+    - port: 9092
+    # puerto del contenedor al que se redirige el tráfico.
+      targetPort: 9092
+
+# accesible solo dentro del clúster.
+  type: ClusterIP
+  
+# En Docker Compose, Kafka se expone en tu máquina (9092:9092).
+
+# En Kubernetes, Kafka se expone solo dentro del clúster mediante un Service ClusterIP.
+
+# El backend se conecta a Kafka usando el nombre del servicio (kafka:9092).

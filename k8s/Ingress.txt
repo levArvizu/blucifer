@@ -1,0 +1,5 @@
+Expone el backend al exterior del clúster.
+
+Host: fullstack-lab.local  
+Puerto: 8080  
+Función: Redirige tráfico HTTP al backend.
