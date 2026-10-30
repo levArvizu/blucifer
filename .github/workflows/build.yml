@@ -69,9 +69,9 @@ jobs:
                backend
           
       - name: Push Docker Image
-          run: |
-            docker push \
-              ${{ secrets.DOCKERHUB_USERNAME }}/fullstack-lab:latest
+        run: |
+          docker push \
+            ${{ secrets.DOCKERHUB_USERNAME }}/fullstack-lab:latest
           
 # Propósito:  
 # Automatiza la compilación y empaquetado de tu aplicación cada vez que haces push o PR a main.
